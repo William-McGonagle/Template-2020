@@ -171,13 +171,14 @@ public class MasterAuto2020 extends LinearOpMode {
         lb.setTargetPosition(target);
 
 
+        rf.setPower(pwr);
+        rb.setPower(pwr);
+        lf.setPower(pwr);
+        lb.setPower(pwr);
 
-        while (opModeIsActive() && rf.isBusy()) {
+        while (opModeIsActive() && rf.isBusy() && rb.isBusy() && lf.isBusy() && lb.isBusy()) {
 
-            rf.setPower(pwr);
-            rb.setPower(pwr);
-            lf.setPower(pwr);
-            lb.setPower(pwr);
+
 
             telemetry.addData("rfpos", rf.getCurrentPosition());
             telemetry.addData("rbpos", rb.getCurrentPosition());
@@ -376,13 +377,15 @@ public class MasterAuto2020 extends LinearOpMode {
         lf.setTargetPosition(target);
         lb.setTargetPosition(-target);
 
-        while (opModeIsActive() && rf.isBusy()) {
+        rf.setPower(pwr);
+        rb.setPower(pwr);
+        lf.setPower(pwr);
+        lb.setPower(pwr);
+
+        while (opModeIsActive() && rf.isBusy() && rb.isBusy() && lf.isBusy() && lb.isBusy()) {
 
 
-            rf.setPower(pwr);
-            rb.setPower(pwr);
-            lf.setPower(pwr);
-            lb.setPower(pwr);
+
 
 
             telemetry.addData("rfpos", rf.getCurrentPosition());

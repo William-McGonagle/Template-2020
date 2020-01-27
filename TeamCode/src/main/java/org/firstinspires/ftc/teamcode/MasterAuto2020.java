@@ -50,10 +50,10 @@ public class MasterAuto2020 extends LinearOpMode {
 
     public ElapsedTime runtime = new ElapsedTime();
 
-    private DcMotor lf = null;
-    private DcMotor rf = null;
-    private DcMotor lb = null;
-    private DcMotor rb = null;
+    public DcMotor lf = null;
+    public DcMotor rf = null;
+    public DcMotor lb = null;
+    public DcMotor rb = null;
 
     //arm
     private DcMotor extend = null;
@@ -158,6 +158,21 @@ public class MasterAuto2020 extends LinearOpMode {
         lf.setPower(0);
         lb.setPower(0); // stop all motors
     }
+
+
+    void driveTime(double pwr, int time){
+
+        rf.setPower(pwr);
+        rb.setPower(pwr);
+        lf.setPower(pwr);
+        lb.setPower(pwr);
+
+        sleep(time);
+
+        halt();
+
+    }
+
 
     void drive(double distance, double pwr) {
         reset();
@@ -282,12 +297,13 @@ public class MasterAuto2020 extends LinearOpMode {
         rb.setTargetPosition(target);
         lf.setTargetPosition(-target);
         lb.setTargetPosition(-target);
+
         rf.setPower(pwr);
         rb.setPower(pwr);
         lf.setPower(pwr);
         lb.setPower(pwr);
 
-        while (opModeIsActive() && rf.isBusy()) {
+        while (opModeIsActive() && rf.isBusy() && rb.isBusy() && lf.isBusy() && lb.isBusy()) {
             telemetry.addData("rfD", rf.getCurrentPosition());
             telemetry.addData("rbD", rb.getCurrentPosition());
             telemetry.addData("lfD", lf.getCurrentPosition());
@@ -300,21 +316,25 @@ public class MasterAuto2020 extends LinearOpMode {
             telemetry.update();
         }
         halt();
+        reset();
     }
 
     void movePlat() {
         telemetry.addData("complete", 3);
         telemetry.update();
-        movePlat1.setPosition(0);
-        movePlat2.setPosition(1.0);
+        movePlat1.setPosition(1);
+        movePlat2.setPosition(.5);
+
 
 
 
     }
 
     void releasePlat() {
-        movePlat1.setPosition(1);
-        movePlat2.setPosition(0);
+        movePlat1.setPosition(0);
+        movePlat2.setPosition(1);
+    sleep(2000);
+
     }
 
 
@@ -405,12 +425,31 @@ public class MasterAuto2020 extends LinearOpMode {
 
 
 
+
+
         //movePlat1.setPosition(0);
         //movePlat2.setPosition(1.0);
 
         //sleep(2000);
+        halt();
+        reset();
+
+    }
+
+    void strafeTime(double pwr, int time) {
+
+
+
+        rf.setPower(-pwr);
+        rb.setPower(pwr);
+        lf.setPower(pwr);
+        lb.setPower(-pwr);
+
+        sleep(time);
 
         halt();
+
+
     }
 
     /**
@@ -611,27 +650,30 @@ public class MasterAuto2020 extends LinearOpMode {
     }
 
     void rotateArmForward(){
-        rotateL.setPower(.75);
-        rotateR.setPower(-.75);
-
+        rotateL.setPower(.5);
+        rotateR.setPower(-.5);
+        sleep(1000);
+        rotateL.setPower(0);
+        rotateR.setPower(0);
 
     }
 
     void rotateArmBack(){
-        rotateL.setPower(-.75);
-        rotateR.setPower(.75);
+        rotateL.setPower(-.4);
+        rotateR.setPower(.4);
+        sleep(1000);
+        rotateL.setPower(0);
+        rotateR.setPower(0);
     }
 
     void grabBlock(){
 
         grab.setPosition(1);
-        sleep(5000);
     }
 
     void releaseBlock(){
 
         grab.setPosition(0);
-        sleep(5000);
     }
 
     void turnACB(int angle, double pwr) {

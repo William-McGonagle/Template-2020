@@ -19,18 +19,49 @@ public class StonePark extends MasterAuto2020 {
         waitForStart();
 
 
+
         rotateArmForward();
 
-        //drive(1.6,.7);
+        drive(1.5,.45);
 
         grabBlock();
+
+        sleep(2000);
 
 
         rotateArmBack();
 
-        //strafe(-3,.7);
+        drive(-.6,.7);
+
+        strafe(4.5,.5);
+
+        pivot(-45,.5);
+
+        drive(.3,.3);
+
+        rotateArmForward();
+
+        releaseBlock();
+
+        sleep(1000);
 
 
+        drive(-.3,.5);
+
+        //pivot(430,.7);
+
+        //drive(-.3,.3);
+
+        //movePlat();
+
+        //sleep(2000);
+
+        //drive(2,.7);
+
+        //releasePlat();
+
+
+        strafe(-3,.7);
 
         halt();
     }

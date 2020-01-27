@@ -19,24 +19,35 @@ public class LoadZone extends MasterAuto2020 {
 
         waitForStart();
 
+        drive(-.2,.7);
+
+        pivot(-180,.7);
 
 
-        drive(-1.6,.7);
+        drive(-1.6,.5);
 
-        strafe(-1,.7);
+        pivot(180,.7);
+
+        drive(-1.6,.5);
 
 
-        movePlat(); 
 
+        movePlat();
+
+        sleep(2000);
+
+        drive(1.6,.7);
+
+        releasePlat();
         sleep(2000);
 
 
 
-        drive(2,.7);
+        pivot(-180,.7);
 
-        releasePlat();
+        drive(-2,.7);
 
-        strafe(2,.7);
+
 
 
 

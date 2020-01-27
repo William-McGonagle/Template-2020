@@ -159,8 +159,9 @@ public class Mechybois2020 extends OpMode {
         }
        else if(gamepad2.right_bumper){
              grab.setPosition(1);
-            
+
         }
+
 
         if(gamepad2.a){
             rotateR.setPower(1);
@@ -181,7 +182,7 @@ public class Mechybois2020 extends OpMode {
 
         if(gamepad1.right_bumper){
             movePlat1.setPosition(1);
-            movePlat2.setPosition(0);
+            movePlat2.setPosition(.5);
 
         }else if(gamepad1.left_bumper){
             movePlat1.setPosition(0);

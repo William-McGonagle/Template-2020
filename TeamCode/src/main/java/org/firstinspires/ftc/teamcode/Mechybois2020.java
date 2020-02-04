@@ -37,6 +37,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
 @TeleOp(name="Mecanum2020", group="TeleOp")
 public class Mechybois2020 extends OpMode {
+
+    // Global Variables
+    static final double TICKS_PER_ROTATION = 1120.0 * 0.75;
+
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -51,6 +55,11 @@ public class Mechybois2020 extends OpMode {
     private Servo grab = null;
     private DcMotor rotateL = null;
     private DcMotor rotateR = null;
+
+        // Arm Safety System
+        public boolean armRaised = false;
+        public boolean firstTick = false;
+        public float armRotationTolerance = 10;
 
     //movePlatform
     private Servo movePlat1 = null;
@@ -162,22 +171,96 @@ public class Mechybois2020 extends OpMode {
 
         }
 
+        /*
 
+
+        // See if the button is pressed to change if the arm is raised or not
         if(gamepad2.a){
-            rotateR.setPower(1);
-            rotateL.setPower(-1);
 
-        }else{
-            rotateR.setPower(0);
-            rotateR.setPower(0);
+            // Set the arm raised status to the opposite of what it originally was. I.E. a toggle button.
+            armRaised = !armRaised;
+
+            // Set the first tick variable to true. This makes it so that we can reset the encoders.
+            firstTick = true;
+
         }
 
+        // See if the button is pressed to change if the arm is raised or not
         if(gamepad2.b){
-            rotateR.setPower(-.5);
-            rotateL.setPower(.5);
+
+            // Set the arm raised status to the opposite of what it originally was. I.E. a toggle button.
+            armRaised = !armRaised;
+
+            // Set the first tick variable to true. This makes it so that we can reset the encoders.
+            firstTick = true;
+
+        }
+
+        // Check if arm is raised or not
+        if (armRaised) {
+
+            rotateL.setPower(0.5f);
+            rotateR.setPower(0.5f);
+
+        } else {
+
+
+
+            rotateL.setPower(-0.5f);
+            rotateR.setPower(-0.5f);
+
+
+
+        }
+
+        telemetry.addData("rotateL", rotateR.getCurrentPosition() * TICKS_PER_ROTATION);
+        telemetry.addData("rotateR", rotateL.getCurrentPosition() * TICKS_PER_ROTATION);
+
+        if (firstTick) {
+
+            // Reset all of the rotation motor encoders, that means that we can track the difference much easier.
+            rotateL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rotateR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+
+            // rotateL.setTargetPosition(0);
+            // rotateR.setTargetPosition(0);
+
+            // rotateL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            // rotateR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            if (armRaised) {
+
+
+
+            } else {
+
+
+
+            }
+
+            // Set firstTick to false because afterwards, it is no longer the first tick
+            firstTick = false;
+
+        }
+
+         */
+
+        if (gamepad2.a) {
+
+            rotateL.setPower(0.5);
+            rotateR.setPower(-0.5);
+
+        }else if (gamepad2.b){
+            rotateL.setPower(-0.5);
+            rotateR.setPower(0.5);
         }else{
-            rotateR.setPower(0);
             rotateL.setPower(0);
+            rotateR.setPower(0);
+
+
+
         }
 
         if(gamepad1.right_bumper){

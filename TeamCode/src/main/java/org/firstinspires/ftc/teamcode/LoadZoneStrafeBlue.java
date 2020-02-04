@@ -42,12 +42,12 @@ public class LoadZoneStrafeBlue extends MasterAuto2020 {
 
         //strafeTime(.7,5000);
 
-        rf.setPower(.7);
-        rb.setPower(-.7);
-        lf.setPower(-.7);
-        lb.setPower(.7);
+        //rf.setPower(.7);
+       //rb.setPower(-.7);
+        //lf.setPower(-.7);
+        //lb.setPower(.7);
 
-        sleep(4500);
+        //sleep(4500);
 
         halt();
 

@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 
-@Autonomous(name="LoadZoneStrafe", group="Autonomous")
-public class LoadZoneStrafe extends MasterAuto2020 {
+@Autonomous(name="LoadZoneStrafeRed", group="Autonomous")
+public class LoadZoneStrafeRed extends MasterAuto2020 {
 
 
 
@@ -21,7 +21,7 @@ public class LoadZoneStrafe extends MasterAuto2020 {
 
         strafeTime(-.5, 1000);
 
-        driveTime(-.5,2300);
+        driveTime(-.5,2400);
 
 
         //drive(-1.7,.5);
@@ -30,24 +30,22 @@ public class LoadZoneStrafe extends MasterAuto2020 {
 
         sleep(2000);
 
+        driveTime(.5, 2000);
         //drive(1.8,.7);
+        pivotTime(-.5, 2500);
+        //driveTime(.5,2500);
 
-        driveTime(.5,2500);
-
-        strafeTime(-.5,2000);
+        driveTime(-.5,1000);
 
         releasePlat();
 
         sleep(2000);
 
-        //strafeTime(.7,5000);
+        driveTime(.5,2500);
 
-        rf.setPower(-.7);
-        rb.setPower(.7);
-        lf.setPower(.7);
-        lb.setPower(-.7);
 
-        sleep(4500);
+
+
 
         halt();
 

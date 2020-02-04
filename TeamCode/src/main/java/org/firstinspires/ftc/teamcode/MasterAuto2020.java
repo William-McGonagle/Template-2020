@@ -50,10 +50,10 @@ public class MasterAuto2020 extends LinearOpMode {
 
     public ElapsedTime runtime = new ElapsedTime();
 
-    public DcMotor lf = null;
-    public DcMotor rf = null;
-    public DcMotor lb = null;
-    public DcMotor rb = null;
+    private DcMotor lf = null;
+    private DcMotor rf = null;
+    private DcMotor lb = null;
+    private DcMotor rb = null;
 
     //arm
     private DcMotor extend = null;
@@ -145,7 +145,6 @@ public class MasterAuto2020 extends LinearOpMode {
         lf.setTargetPosition(0);
         lb.setTargetPosition(0);
 
-
         rf.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rb.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lf.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -166,6 +165,19 @@ public class MasterAuto2020 extends LinearOpMode {
         rb.setPower(pwr);
         lf.setPower(pwr);
         lb.setPower(pwr);
+
+        sleep(time);
+
+        halt();
+
+    }
+
+    void pivotTime(double pwr, int time){
+
+        rf.setPower(pwr);
+        rb.setPower(pwr);
+        lf.setPower(-pwr);
+        lb.setPower(-pwr);
 
         sleep(time);
 
@@ -650,8 +662,8 @@ public class MasterAuto2020 extends LinearOpMode {
     }
 
     void rotateArmForward(){
-        rotateL.setPower(.5);
-        rotateR.setPower(-.5);
+        rotateL.setPower(.4);
+        rotateR.setPower(-.4);
         sleep(1000);
         rotateL.setPower(0);
         rotateR.setPower(0);
@@ -659,8 +671,8 @@ public class MasterAuto2020 extends LinearOpMode {
     }
 
     void rotateArmBack(){
-        rotateL.setPower(-.4);
-        rotateR.setPower(.4);
+        rotateL.setPower(-.3);
+        rotateR.setPower(.3);
         sleep(1000);
         rotateL.setPower(0);
         rotateR.setPower(0);
@@ -669,11 +681,13 @@ public class MasterAuto2020 extends LinearOpMode {
     void grabBlock(){
 
         grab.setPosition(1);
+        sleep(2000);
     }
 
     void releaseBlock(){
 
         grab.setPosition(0);
+        sleep(2000);
     }
 
     void turnACB(int angle, double pwr) {

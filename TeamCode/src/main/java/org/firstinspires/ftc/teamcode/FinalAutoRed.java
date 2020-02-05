@@ -28,7 +28,7 @@ public class FinalAutoRed extends MasterAuto2020{
 
         pivotTime(-.7, 750);
 
-        driveTime(.7,2700);
+        driveTime(.7,2800);
 
         pivotTime(.7, 800);
 

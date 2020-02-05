@@ -70,35 +70,49 @@ public class Mechybois2020 extends OpMode {
      */
     @Override
     public void init() {
+
+        // Get the Motors to Drive the Movement System
         lf = hardwareMap.get(DcMotor.class, "lf");
         lb = hardwareMap.get(DcMotor.class, "lb");
         rf = hardwareMap.get(DcMotor.class, "rf");
         rb = hardwareMap.get(DcMotor.class, "rb");
 
+        // Get the motors that control the Arm Mechanism
         extend = hardwareMap.get(DcMotor.class, "extend");
         grab = hardwareMap.get(Servo.class, "grab");
         rotateL = hardwareMap.get(DcMotor.class, "rotateL");
         rotateR = hardwareMap.get(DcMotor.class, "rotateR");
 
+        // Get the Motors that control the Platform Grabbing System
         movePlat1 = hardwareMap.get(Servo.class, "movePlat1");
         movePlat2 = hardwareMap.get(Servo.class, "movePlat2");
 
+        // Set the direction of the Driving Motors
+            // REASON: For the Mechanim Wheels to work simply, we Invert the Left Wheels.
         lf.setDirection(DcMotor.Direction.REVERSE);
         lb.setDirection(DcMotor.Direction.REVERSE);
         rf.setDirection(DcMotor.Direction.FORWARD);
         rb.setDirection(DcMotor.Direction.FORWARD);
 
+        //
         rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        // Make the Motors so they run using the Encoder
+            // REASON: This Leads To More Dependable Movement/ We are Now Able to Track Our Movement
         lf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        telemetry.addData("Status", "Let's roll.");          // tell the driver we're all set
+        // Log the Status of the Robot.
+            // REASON: It adds a bit more fun to the robot.
+            // ALSO: Sorry Ethan, It was Too Much Fun.
+
+        String[] possibleSayings = new String[]{"Let's roll.", "Ready To Rumble.", "Beep Boop.", "Taking Over The World", "About to Win The Contest"};
+        telemetry.addData("Status", possibleSayings[(int)(Math.random() * possibleSayings.length)]);          // tell the driver we're all set
     }
 
     @Override
@@ -171,8 +185,7 @@ public class Mechybois2020 extends OpMode {
 
         }
 
-        /*
-
+       /*
 
         // See if the button is pressed to change if the arm is raised or not
         if(gamepad2.a){
@@ -245,23 +258,28 @@ public class Mechybois2020 extends OpMode {
 
         }
 
-         */
+        */
 
-        if (gamepad2.a) {
+
+
+        if (gamepad2.b) {
 
             rotateL.setPower(0.5);
             rotateR.setPower(-0.5);
 
-        }else if (gamepad2.b){
+        }else if (gamepad2.a){
+
             rotateL.setPower(-0.5);
             rotateR.setPower(0.5);
+
         }else{
+
             rotateL.setPower(0);
             rotateR.setPower(0);
 
-
-
         }
+
+
 
         if(gamepad1.right_bumper){
             movePlat1.setPosition(1);
@@ -285,6 +303,7 @@ public class Mechybois2020 extends OpMode {
         telemetry.addData("lf pos", + lf.getCurrentPosition());
         telemetry.addData("lb pos", + lb.getCurrentPosition());
 
+        telemetry.addData("Alive", "Quite Possibly");
 
         //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
         telemetry.update();
@@ -296,6 +315,8 @@ public class Mechybois2020 extends OpMode {
     @Override
     public void stop() {
     }
+
+
     float scaleInput(float in) {
         float out = in*in;
         if (in < 0)

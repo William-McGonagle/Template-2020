@@ -329,13 +329,13 @@ public class Mechybois2020 extends OpMode {
         }
 
         // Check if the Right Bumper or Left Bumper Are Pressed.
-        if(gamepad1.right_bumper){
+        if (gamepad1.right_bumper) {
         
             // If the Right Bumper is Pressed, Move Down the Platform Grabber Hands
             movePlat1.setPosition(1);
             movePlat2.setPosition(.5);
 
-        }else if(gamepad1.left_bumper){
+        } else if (gamepad1.left_bumper) {
             
             // If the Left Bumper is Pressed, Move Up the Platform Grabber Hands
             movePlat1.setPosition(0);

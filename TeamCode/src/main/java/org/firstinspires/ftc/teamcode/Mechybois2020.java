@@ -44,13 +44,17 @@ public class Mechybois2020 extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
-    //drive
+    // drive
     private DcMotor lf = null;
     private DcMotor rf = null;
     private DcMotor lb = null;
     private DcMotor rb = null;
+    
+    // controller values
+    private float reducedMovementMultiplier = 0.2f;
+    private float controllerDriftReductionThreshold = 0.05f;
 
-    //arm
+    // arm
     private DcMotor extend = null;
     private Servo grab = null;
     private DcMotor rotateL = null;
@@ -94,7 +98,8 @@ public class Mechybois2020 extends OpMode {
         rf.setDirection(DcMotor.Direction.FORWARD);
         rb.setDirection(DcMotor.Direction.FORWARD);
 
-        //
+        // Make it so that if there is no power to motors, they break.
+            // REASON: Makes the robot stop much faster.
         rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -107,26 +112,31 @@ public class Mechybois2020 extends OpMode {
         rf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        // Log the Status of the Robot.
+        // Log the Status of the Robot and Tell the Driver that We Are Ready
             // REASON: It adds a bit more fun to the robot.
             // ALSO: Sorry Ethan, It was Too Much Fun.
 
         String[] possibleSayings = new String[]{"Let's roll.", "Ready To Rumble.", "Beep Boop.", "Taking Over The World", "About to Win The Contest"};
-        telemetry.addData("Status", possibleSayings[(int)(Math.random() * possibleSayings.length)]);          // tell the driver we're all set
+        telemetry.addData("Status", possibleSayings[(int)(Math.random() * possibleSayings.length)]);
     }
 
+    // Implement inherited initial loop function.
     @Override
     public void init_loop() {
+    
     }
 
+    // Implement inherited start function.
     @Override
     public void start() {
+    
+        // When we start, we want to reset the runtime information
         runtime.reset();
+    
     }
 
 
     /* CONTROLS LIST
-
 
     DRIVE
     G1 left stick y             STRAIGHT
@@ -134,37 +144,59 @@ public class Mechybois2020 extends OpMode {
     G1 right stick x            ROTATE
     G1 X                        SLOW
 
-
      */
 
+    // Implement Inherited Loop Function.
+    
     @Override
     public void loop() {
 
         //region drivetrain power
+        
+        // Set the Movement Variables to Scaled Input Values
+            // REASON: If We Give the Variables the Gamepad Inputs Directly, it Will Not Scale Correctly by Itself
+        
         float drive = scaleInput(-gamepad1.left_stick_y);
         float strafe = scaleInput(gamepad1.left_stick_x);
         float rotate = scaleInput(gamepad1.right_stick_x);
 
+        // Log Information About the Movement that we are Doing Currently.
+            // REASON: This Lets the Drivers Know that if there is a Problem, it is not the Controllers.
+        
         telemetry.addData("drive", + drive);
         telemetry.addData("strafe", + strafe);
         telemetry.addData("rotate", + rotate);
 
-        if(Math.abs(drive) < 0.05f) drive = 0.0f;
-        if(Math.abs(strafe) < 0.05f) strafe = 0.0f;
-        if(Math.abs(rotate) < 0.05f) rotate = 0.0f;
+        // Round Down the Variables if they are Close to Certain Thresholds
+            // REASON: This Reduces the Amount of Drift that can Accur in the Controllers. 
+        
+        if(Math.abs(drive) < controllerDriftReductionThreshold) drive = 0.0f;
+        if(Math.abs(strafe) < controllerDriftReductionThreshold) strafe = 0.0f;
+        if(Math.abs(rotate) < controllerDriftReductionThreshold) rotate = 0.0f;
 
+        // Check if the "X" Button is Being Pressed on the Driving Controller
+            // REASON: We Want the Robot to Move Much Slower if "X" is Pressed
+        
         if(!gamepad1.x) {
+            
+            // Set the Driving Values for the Motors
+            
             lf.setPower(Range.clip(drive + strafe + rotate, -1.0, 1.0));
             lb.setPower(Range.clip(drive - strafe + rotate, -1.0, 1.0));
             rf.setPower(Range.clip(drive - strafe - rotate, -1.0, 1.0));
             rb.setPower(Range.clip(drive + strafe - rotate, -1.0, 1.0));
+        
+        } else {
+            
+            // Set the Reduced Driving Values for the Motors
+            
+            lf.setPower(reducedMovementMultiplier * Range.clip(drive + strafe + rotate, -1.0, 1.0));
+            lb.setPower(reducedMovementMultiplier * Range.clip(drive - strafe + rotate, -1.0, 1.0));
+            rf.setPower(reducedMovementMultiplier * Range.clip(drive - strafe - rotate, -1.0, 1.0));
+            rb.setPower(reducedMovementMultiplier * Range.clip(drive + strafe - rotate, -1.0, 1.0));
+        
         }
-        else{
-            lf.setPower(.2*Range.clip(drive + strafe + rotate, -1.0, 1.0));
-            lb.setPower(.2*Range.clip(drive - strafe + rotate, -1.0, 1.0));
-            rf.setPower(.2*Range.clip(drive - strafe - rotate, -1.0, 1.0));
-            rb.setPower(.2*Range.clip(drive + strafe - rotate, -1.0, 1.0));
-        }
+        
         //endregion
 
         //arm

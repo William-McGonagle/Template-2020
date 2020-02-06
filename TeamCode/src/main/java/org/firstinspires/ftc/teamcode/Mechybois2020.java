@@ -201,19 +201,36 @@ public class Mechybois2020 extends OpMode {
 
         //arm
 
-        if((gamepad2.dpad_up || gamepad1.dpad_up)){         //up
+        // Check if the D-Pad Up or D-Pad Down is Being Pressed on Either Controller
+        
+        if(gamepad2.dpad_up || gamepad1.dpad_up) {
+        
+            // If the D-Pad is Being Pressed Up, We Want to Extend the Arm
             extend.setPower(1);
-        } else if((gamepad2.dpad_down || gamepad1.dpad_down)){         //down
+            
+        } else if (gamepad2.dpad_down || gamepad1.dpad_down) {
+        
+            // If the D-Pad is Being Pressed Down, We Want to Retract the Arm 
             extend.setPower(-1);
+        
         } else {
+        
+            // If None of these Buttons are Pressed, We don't Want to do Anything.
             extend.setPower(0);
+        
         }
-
-       if(gamepad2.left_bumper) {
-          grab.setPosition(0);
-        }
-       else if(gamepad2.right_bumper){
-             grab.setPosition(1);
+        
+        // Check if the Left or Right Bumper are Being Pressed.
+        
+        if (gamepad2.left_bumper) {
+           
+            // If The Left Bumper is Pressed, We Want it to Clamp Down.
+            grab.setPosition(0);
+        
+        } else if (gamepad2.right_bumper) {
+            
+            // If The Right Bumper is Pressed, We Want it to Open Up.
+            grab.setPosition(1);
 
         }
 
@@ -254,8 +271,6 @@ public class Mechybois2020 extends OpMode {
             rotateL.setPower(-0.5f);
             rotateR.setPower(-0.5f);
 
-
-
         }
 
         telemetry.addData("rotateL", rotateR.getCurrentPosition() * TICKS_PER_ROTATION);
@@ -266,8 +281,6 @@ public class Mechybois2020 extends OpMode {
             // Reset all of the rotation motor encoders, that means that we can track the difference much easier.
             rotateL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             rotateR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
 
             // rotateL.setTargetPosition(0);
             // rotateR.setTargetPosition(0);
@@ -292,69 +305,100 @@ public class Mechybois2020 extends OpMode {
 
         */
 
-
-
+        // Check if the "B" Button is Pressed, or if the "A" Button is Pressed.
         if (gamepad2.b) {
 
+            // If "B" is Pressed, Rotate Up the Crane.
+                // NOTE: The "rotateR" Motor is inverted.g
             rotateL.setPower(0.5);
             rotateR.setPower(-0.5);
 
-        }else if (gamepad2.a){
+        } else if (gamepad2.a) {
 
+            // If "B" is Pressed, Rotate Down the Crane.
+                // NOTE: The "rotateR" Motor is inverted.
             rotateL.setPower(-0.5);
             rotateR.setPower(0.5);
 
-        }else{
+        } else {
 
+            // If Nothing Happens, Don't Move the Motors at All
             rotateL.setPower(0);
             rotateR.setPower(0);
 
         }
 
-
-
+        // Check if the Right Bumper or Left Bumper Are Pressed.
         if(gamepad1.right_bumper){
+        
+            // If the Right Bumper is Pressed, Move Down the Platform Grabber Hands
             movePlat1.setPosition(1);
             movePlat2.setPosition(.5);
 
         }else if(gamepad1.left_bumper){
+            
+            // If the Left Bumper is Pressed, Move Up the Platform Grabber Hands
             movePlat1.setPosition(0);
             movePlat2.setPosition(1);
+        
         }
 
-
         //region telemetry
+        
+        // Log All of the Movement Data.
+            // REASON: This Allows the Driver to See if the Motors are Working or Not
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("rb power", + rb.getPower());
         telemetry.addData("rf power", + rf.getPower());
         telemetry.addData("lf power", + lf.getPower());
         telemetry.addData("lb power", + lb.getPower());
 
+        // Log Position of Movement Data
+            // REASON: This Helps the Driver see Where the Motors are Currently Positioned
         telemetry.addData("rb pos", + rb.getCurrentPosition());
         telemetry.addData("rf pos", + rf.getCurrentPosition());
         telemetry.addData("lf pos", + lf.getCurrentPosition());
         telemetry.addData("lb pos", + lb.getCurrentPosition());
 
-        telemetry.addData("Alive", "Quite Possibly");
-
         //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+        
+        // Push Telementry Data to Phone Display
         telemetry.update();
+        
         //endregion
     }
 
 
 
+    //Implement Inherited "Stop" Function
     @Override
     public void stop() {
+    
+        // Create an Array of Possible Sayings the Robot can Say When it Shuts Down
+        String[] possibleSayings = new String[]{"Goodbye", "Sweet Dreams", "Boop Beep.", "No Longer Taking Over The World", "Thinking About Our Win", "Preparing for the Post-Win Party"};
+        telemetry.addData("Status", possibleSayings[(int)(Math.random() * possibleSayings.length)]);
+        
     }
 
-
+    // Function to Scale the Inputs
+        // REASON: This makes Inputs Take a Parabolic Shape
     float scaleInput(float in) {
+
+        // Create a Variable Named "out" that is "in" to the Power of Two
         float out = in*in;
+
+        // Check if "in" is a Negative Number. If it is, make "out" into a Negative Number
+            // REASON: The Negative Value of "in" multiplied by itself will result in a positive.
+            // REASON: If it is a negative number, we have to make sure the result is negative.
         if (in < 0)
             out = -out;
-        return(out);
+        
+        // We Want to Return the End Result of this Function.
+        return out;
+        
     }
+    
+    // TODO: Make Another Function that Scales Inputs with a Different Function
 
 
 }

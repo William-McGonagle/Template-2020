@@ -400,5 +400,41 @@ public class Mechybois2020 extends OpMode {
     
     // TODO: Make Another Function that Scales Inputs with a Different Function
 
+    float smartScaleInput (in) {
 
+        float[] smartScale = { -1f, -1f, -0.9f, -0.5f, -0.1f, 0, 0.1f, 0.5f, 0.9f, 1f, 1f };
+        float out = 0;
+    
+        int closest = -1;
+        
+        for (int i = 0; i < smartScale.length; i++) {
+        
+            if (Math.Abs(smartScale[closest] - in) > Math.Abs(smartScale[i] - in)) {
+            
+                closest = i;
+                
+            }
+        
+        }    
+        
+        if (closest == smartScale.length - 1) {
+        
+            out = lerp(closest, closest - 1, (smartScale[closest] - in) + (smartScale[closest - 1] - in));
+        
+        } else {
+        
+            out = lerp(closest, closest + 1, (smartScale[closest] - in) + (smartScale[closest + 1] - in));
+        
+        }
+     
+        return out;
+        
+    }
+    
+    float lerp(start, end, t) {
+    
+        return start * (1 - t) + end * t;
+    
+    }
+    
 }
